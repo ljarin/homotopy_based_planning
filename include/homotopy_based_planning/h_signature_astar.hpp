@@ -15,6 +15,13 @@
 
 namespace hbp
 {
+    template <class T>
+    inline void hash_combine(std::size_t& seed, const T& v)
+    {
+        std::hash<T> hasher;
+        seed ^= hasher(v) + 0x9e3779b9 + (seed<<6) + (seed>>2);
+    }
+
     enum StopwatchControl {RESET, READ};
 
     inline double stopwatch(const StopwatchControl control = READ)
@@ -126,8 +133,8 @@ namespace hbp
                     std::size_t operator()(const AugmentedConfigType& config) const
                     {
                         std::size_t seed = 0;
-                        std::hash_combine(seed, config.basic_config_);
-                        std::hash_combine(seed, config.h_signature_rounded_);
+                        hash_combine(seed, config.basic_config_);
+                        hash_combine(seed, config.h_signature_rounded_);
                         return seed;
                     }
             };

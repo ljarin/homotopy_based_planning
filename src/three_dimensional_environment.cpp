@@ -73,7 +73,7 @@ static void addLineSegmentToCollisionMapGrid(sdf_tools::CollisionMapGrid& map, c
                 if (in_circle)
                 {
                     const Eigen::Vector3d loc = rot * Eigen::Vector3d(x, y, z) + start;
-                    map.Set3d(loc, sdf_tools::COLLISION_CELL(1.0));
+                    map.SetValue3d(loc, sdf_tools::COLLISION_CELL(1.0));
                 }
             }
         }
@@ -96,7 +96,7 @@ static void addRectangularSolidToCollisionMapGrid(sdf_tools::CollisionMapGrid& m
         {
             for (double z = a.z(); z <= b.z(); z += map.GetResolution())
             {
-                map.Set(x, y, z, sdf_tools::COLLISION_CELL(1.0));
+                map.SetValue(x, y, z, sdf_tools::COLLISION_CELL(1.0));
             }
         }
     }
@@ -169,8 +169,8 @@ ThreeDimensionalEnvironment ThreeDimensionalEnvironment::CreateBhattacharyaExamp
         env.start_ = ConfigType(2.0, 18.0, 6.0);
         env.goal_ = ConfigType(18.0, 2.0, 15.0);
 
-        assert(env.collision_map_grid_.Get(env.start_.x(), env.start_.y(), env.start_.z()).first.occupancy == 0.0);
-        assert(env.collision_map_grid_.Get(env.goal_.x(), env.goal_.y(), env.goal_.z()).first.occupancy == 0.0);
+        assert(env.collision_map_grid_.GetImmutable(env.start_.x(), env.start_.y(), env.start_.z()).first.occupancy == 0.0);
+        assert(env.collision_map_grid_.GetImmutable(env.goal_.x(), env.goal_.y(), env.goal_.z()).first.occupancy == 0.0);
     }
 
     // Pre-generate markers for exporting
@@ -271,8 +271,8 @@ ThreeDimensionalEnvironment ThreeDimensionalEnvironment::CreateBhattacharyaExamp
 //        env.start_ = ConfigType(0.0, 19.0, 6.0);
         env.goal_ = ConfigType(19.0, 1.0, 15.0);
 
-        assert(env.collision_map_grid_.Get(env.start_.x(), env.start_.y(), env.start_.z()).first.occupancy == 0.0);
-        assert(env.collision_map_grid_.Get(env.goal_.x(), env.goal_.y(), env.goal_.z()).first.occupancy == 0.0);
+        assert(env.collision_map_grid_.GetImmutable(env.start_.x(), env.start_.y(), env.start_.z()).first.occupancy == 0.0);
+        assert(env.collision_map_grid_.GetImmutable(env.goal_.x(), env.goal_.y(), env.goal_.z()).first.occupancy == 0.0);
     }
 
     // Pre-generate markers for exporting
@@ -393,8 +393,8 @@ ThreeDimensionalEnvironment ThreeDimensionalEnvironment::CreateBhattacharyaExamp
         env.start_ = ConfigType(5.0, 5.0, 5.0);
         env.goal_ = ConfigType(41.0, 41.0, 41.0);
 
-        assert(env.collision_map_grid_.Get(env.start_.x(), env.start_.y(), env.start_.z()).first.occupancy == 0.0);
-        assert(env.collision_map_grid_.Get(env.goal_.x(), env.goal_.y(), env.goal_.z()).first.occupancy == 0.0);
+        assert(env.collision_map_grid_.GetImmutable(env.start_.x(), env.start_.y(), env.start_.z()).first.occupancy == 0.0);
+        assert(env.collision_map_grid_.GetImmutable(env.goal_.x(), env.goal_.y(), env.goal_.z()).first.occupancy == 0.0);
     }
 
     // Pre-generate markers for exporting
@@ -499,7 +499,7 @@ EigenHelpers::VectorVector3d ThreeDimensionalEnvironment::getNeighbours(const Co
                     const ConfigType neighbour = node + ConfigType(dx, dy, dz);
                     assertIsGridAligned(neighbour);
 
-                    if (collision_map_grid_.Get(neighbour[0], neighbour[1], neighbour[2]).first.occupancy < 0.5)
+                    if (collision_map_grid_.GetImmutable(neighbour[0], neighbour[1], neighbour[2]).first.occupancy < 0.5)
                     {
                         neighbours.push_back(neighbour);
                     }

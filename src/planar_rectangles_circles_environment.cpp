@@ -22,7 +22,7 @@ static void addCircleToCollisionMapGrid(sdf_tools::CollisionMapGrid& map, const 
             const bool in_circle = (Eigen::Vector2d(x, y) - circle.center_).squaredNorm() <= circle.radius_ * circle.radius_;
             if (in_circle)
             {
-                map.Set(x, y, z, sdf_tools::COLLISION_CELL(1.0));
+                map.SetValue(x, y, z, sdf_tools::COLLISION_CELL(1.0));
             }
         }
     }
@@ -36,7 +36,7 @@ static void addRectangleToCollisionMapGrid(sdf_tools::CollisionMapGrid& map, con
     {
         for (double y = rectangle.bottom_left_corner_.y(); y <= rectangle.upper_right_corner_.y(); y += map.GetResolution())
         {
-            map.Set(x, y, z, sdf_tools::COLLISION_CELL(1.0));
+            map.SetValue(x, y, z, sdf_tools::COLLISION_CELL(1.0));
         }
     }
 }
@@ -165,8 +165,8 @@ PlanarRectangesCircles PlanarRectangesCircles::CreateBhattacharyaExampleFig12()
     env.start_ = Eigen::Vector2d(20.0, 200.0);
     env.goal_ = Eigen::Vector2d(950.0, 900.0);
 
-    assert(env.collision_map_grid_.Get(env.start_.x(), env.start_.y(), 0.0).first.occupancy == 0.0);
-    assert(env.collision_map_grid_.Get(env.goal_.x(), env.goal_.y(), 0.0).first.occupancy == 0.0);
+    assert(env.collision_map_grid_.GetImmutable(env.start_.x(), env.start_.y(), 0.0).first.occupancy == 0.0);
+    assert(env.collision_map_grid_.GetImmutable(env.goal_.x(), env.goal_.y(), 0.0).first.occupancy == 0.0);
 
     // Pre-generate markers for exporting
     env.collision_map_marker_array_.markers.push_back(env.collision_map_grid_.ExportForDisplay(
@@ -227,8 +227,8 @@ PlanarRectangesCircles PlanarRectangesCircles::CreateBhattacharyaExampleFig13()
     env.start_ = Eigen::Vector2d(1.0, 1.0);
     env.goal_ = Eigen::Vector2d(49.0, 49.0);
 
-    assert(env.collision_map_grid_.Get(env.start_.x(), env.start_.y(), 0.0).first.occupancy == 0.0);
-    assert(env.collision_map_grid_.Get(env.goal_.x(), env.goal_.y(), 0.0).first.occupancy == 0.0);
+    assert(env.collision_map_grid_.GetImmutable(env.start_.x(), env.start_.y(), 0.0).first.occupancy == 0.0);
+    assert(env.collision_map_grid_.GetImmutable(env.goal_.x(), env.goal_.y(), 0.0).first.occupancy == 0.0);
 
     // Generate the allowable H-signature
     std::vector<Eigen::Vector2d> path;
@@ -383,11 +383,11 @@ PlanarRectangesCircles PlanarRectangesCircles::CreateBhattacharyaExampleFig14()
         env.start_2nd_robot_ = Eigen::Vector2d(50.0, 18.0);
         env.goal_2nd_robot_ = Eigen::Vector2d(64.0, 95.0);
 
-        assert(env.collision_map_grid_.Get(env.start_.x(), env.start_.y(), 0.0).first.occupancy == 0.0);
-        assert(env.collision_map_grid_.Get(env.goal_.x(), env.goal_.y(), 0.0).first.occupancy == 0.0);
+        assert(env.collision_map_grid_.GetImmutable(env.start_.x(), env.start_.y(), 0.0).first.occupancy == 0.0);
+        assert(env.collision_map_grid_.GetImmutable(env.goal_.x(), env.goal_.y(), 0.0).first.occupancy == 0.0);
 
-        assert(env.collision_map_grid_.Get(env.start_2nd_robot_.x(), env.start_2nd_robot_.y(), 0.0).first.occupancy == 0.0);
-        assert(env.collision_map_grid_.Get(env.goal_2nd_robot_.x(), env.goal_2nd_robot_.y(), 0.0).first.occupancy == 0.0);
+        assert(env.collision_map_grid_.GetImmutable(env.start_2nd_robot_.x(), env.start_2nd_robot_.y(), 0.0).first.occupancy == 0.0);
+        assert(env.collision_map_grid_.GetImmutable(env.goal_2nd_robot_.x(), env.goal_2nd_robot_.y(), 0.0).first.occupancy == 0.0);
     }
 
     // Pre-generate markers for exporting
@@ -479,7 +479,7 @@ EigenHelpers::VectorVector2d PlanarRectangesCircles::getNeighbours(const Eigen::
                 const Eigen::Vector2d neighbour = node + Eigen::Vector2d(dx, dy);
                 assertIsGridAligned(neighbour);
 
-                if (collision_map_grid_.Get(neighbour[0], neighbour[1], 0.0).first.occupancy < 0.5)
+                if (collision_map_grid_.GetImmutable(neighbour[0], neighbour[1], 0.0).first.occupancy < 0.5)
                 {
                     neighbours.push_back(neighbour);
                 }
